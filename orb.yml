@@ -10,11 +10,24 @@ display:
 commands:
   scan:
     description: Scans then outputs the findings
+<<<<<<< Updated upstream
+=======
+    parameters:
+      aws-role-arn:
+        type: string
+        description: The arn of the aws role able to use ecr
+      aws-role-session-name:
+        type: string
+        description: The name of the role's session name
+      image-name:
+        type: string
+        description: The name of the image
+>>>>>>> Stashed changes
     steps:
       - run:
           command: |
             get_findings() {
-                findings=$(aws ecr describe-image-scan-findings --repository-name "$CIRCLE_PROJECT_REPONAME" --image-id "imageTag=\"git-$CIRCLE_SHA1\"")
+                findings=$(aws ecr describe-image-scan-findings --repository-name "<< parameters.image-name >>" --image-id "imageTag=\"$CIRCLE_SHA1\"")
                 echo "${findings}" | jq .
                 echo
                 status=$(echo "${findings}" | jq -r ".imageScanStatus.status")
@@ -40,9 +53,22 @@ commands:
 
 jobs:
   scan:
-    executor: trussworks/circleci-docker-primary
+    parameters:
+      aws-role-arn:
+        type: string
+        description: The arn of the aws role able to use ecr
+      aws-role-session-name:
+        type: string
+        description: The name of the role's session name
+      image-name:
+        type: string
+        description: The name of the image
+    executor: trussworks-circleci-docker-primary
     steps:
-      - scan
+      - scan:
+          aws-role-arn: << parameters.aws-role-arn >>
+          aws-role-session-name: << parameters.aws-role-session-name >>
+          image-name: << parameters.image-name >>
 
 executors:
   trussworks/circleci-docker-primary:
