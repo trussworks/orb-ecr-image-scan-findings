@@ -10,8 +10,6 @@ display:
 commands:
   scan:
     description: Scans then outputs the findings
-<<<<<<< Updated upstream
-=======
     parameters:
       aws-role-arn:
         type: string
@@ -22,7 +20,6 @@ commands:
       image-name:
         type: string
         description: The name of the image
->>>>>>> Stashed changes
     steps:
       - run:
           command: |
