@@ -1,0 +1,50 @@
+version: 2.1
+
+description: >
+  Use to check for ECR image scan findings
+
+display:
+  home_url: https://truss.works/
+  source_url: https://github.com/trussworks/ecr-image-scan-findings
+
+commands:
+  scan:
+    description: Scans then outputs the findings
+    steps:
+      - run:
+          command: |
+            get_findings() {
+                findings=$(aws ecr describe-image-scan-findings --repository-name "$CIRCLE_PROJECT_REPONAME" --image-id "imageTag=\"git-$CIRCLE_SHA1\"")
+                echo "${findings}" | jq .
+                echo
+                status=$(echo "${findings}" | jq -r ".imageScanStatus.status")
+                numberOfFindings=$(echo "${findings}" | jq -r ".imageScanFindings.findings | length")
+            }
+
+            # Get the results of the scan or wait until they are ready
+            get_findings
+            while [[ "${status}" == "IN_PROGRESS" ]]; do
+                sleep 15
+                get_findings
+            done
+
+            if [[ "${status}" != *COMPLETE* ]]; then
+                echo "Scan does not appear COMPLETE"
+                exit 1
+            fi
+
+            if [[ "${numberOfFindings}" -gt 0 ]]; then
+                echo "Scan found ${numberOfFindings} findings!"
+                exit 1
+            fi
+
+jobs:
+  scan:
+    executor: trussworks/circleci-docker-primary
+    steps:
+      - scan
+
+executors:
+  trussworks/circleci-docker-primary:
+    docker:
+      - image: trussworks/circleci-docker-primary:e66fbea875bcb788b29b1b5f59142e8231961ec5
