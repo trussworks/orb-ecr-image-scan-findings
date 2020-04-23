@@ -11,7 +11,7 @@ For full usage guidelines, see the [orb registry listing](https://circleci.com/o
 ### Expectations
 
 - Used in a repository where an image is being built
-- Access to an AWS account that can run ECR's [DescribeImageScanFindings](https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_DescribeImageScanFindings.html) action
+- Access to an AWS account that can run ECR on the specified image
 
 ### Example
 
@@ -21,7 +21,7 @@ For an example of this orb in use, see the GitHub repo [trussworks-atlantis-ecs-
 
 Install dependencies
 
-```
+```sh
 brew install circleci pre-commit
 pre-commit install --install-hooks
 ```
