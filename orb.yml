@@ -26,9 +26,9 @@ commands:
             temp_role=$(aws sts assume-role \
                     --role-arn << parameters.aws-role-arn >> \
                     --role-session-name << parameters.aws-role-session-name >> )
-            export AWS_ACCESS_KEY_ID=$(jq --raw-output --monochrome-output .Credentials.AccessKeyId <<< "$temp_role")
-            export AWS_SECRET_ACCESS_KEY=$(jq --raw-output --monochrome-output .Credentials.SecretAccessKey <<< "$temp_role")
-            export AWS_SESSION_TOKEN=$(jq --raw-output --monochrome-output .Credentials.SessionToken <<< "$temp_role")
+            export AWS_ACCESS_KEY_ID=$(jq --raw-output --monochrome-output .Credentials.AccessKeyId \<\<\< "$temp_role")
+            export AWS_SECRET_ACCESS_KEY=$(jq --raw-output --monochrome-output .Credentials.SecretAccessKey \<\<\< "$temp_role")
+            export AWS_SESSION_TOKEN=$(jq --raw-output --monochrome-output .Credentials.SessionToken \<\<\< "$temp_role")
 
             get_findings() {
                 findings=$(aws ecr describe-image-scan-findings --repository-name "<< parameters.image-name >>" --image-id "imageTag=\"$CIRCLE_SHA1\"")
