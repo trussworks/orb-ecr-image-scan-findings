@@ -19,7 +19,7 @@ commands:
         description: The name of the role's session name
       ecr-repository-name:
         type: string
-        description: The name of the ECR repository for the image that will be scanned
+        description: The name of the ECR repository where the image will be scanned
     steps:
       - run:
           command: |
@@ -66,7 +66,7 @@ jobs:
         description: The name of the role's session name
       ecr-repository-name:
         type: string
-        description: The name of the ECR repository for the image that will be scanned
+        description: The name of the ECR repository where the image will be scanned
     executor: trussworks-circleci-docker-primary
     steps:
       - scan:
