@@ -17,9 +17,9 @@ commands:
       aws-role-session-name:
         type: string
         description: The name of the role's session name
-      image-name:
+      ecr-repository-name:
         type: string
-        description: The name of the image that will be scanned
+        description: The name of the ECR repository where the image will be scanned
     steps:
       - run:
           command: |
@@ -31,7 +31,7 @@ commands:
             export AWS_SESSION_TOKEN=$(echo $temp_role | jq .Credentials.SessionToken | xargs)
 
             get_findings() {
-                findings=$(aws ecr describe-image-scan-findings --repository-name "<< parameters.image-name >>" --image-id "imageTag=\"$CIRCLE_SHA1\"")
+                findings=$(aws ecr describe-image-scan-findings --repository-name "<< parameters.ecr-repository-name >>" --image-id "imageTag=\"$CIRCLE_SHA1\"")
                 echo "${findings}" | jq .
                 echo
                 status=$(echo "${findings}" | jq -r ".imageScanStatus.status")
@@ -64,15 +64,15 @@ jobs:
       aws-role-session-name:
         type: string
         description: The name of the role's session name
-      image-name:
+      ecr-repository-name:
         type: string
-        description: The name of the image
+        description: The name of the ECR repository where the image will be scanned
     executor: trussworks-circleci-docker-primary
     steps:
       - scan:
           aws-role-arn: << parameters.aws-role-arn >>
           aws-role-session-name: << parameters.aws-role-session-name >>
-          image-name: << parameters.image-name >>
+          ecr-repository-name: << parameters.ecr-repository-name >>
 
 executors:
   trussworks-circleci-docker-primary:
