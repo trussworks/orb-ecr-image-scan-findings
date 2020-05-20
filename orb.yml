@@ -18,6 +18,7 @@ commands:
       aws-role-session-name:
         type: string
         description: The name of the role's session name
+        default: ""
       ecr-repository-name:
         type: string
         description: The name of the ECR repository where the image will be scanned
