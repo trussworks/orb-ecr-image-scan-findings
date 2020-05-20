@@ -14,17 +14,17 @@ commands:
       aws-role-arn:
         type: string
         description: The arn of the aws role able to use ecr
+        default: ""
       aws-role-session-name:
         type: string
         description: The name of the role's session name
       ecr-repository-name:
         type: string
         description: The name of the ECR repository where the image will be scanned
-        default: ""
     steps:
       - run:
           command: |
-            if [[ -n << parameters.ecr-repository-name >> ]]; then
+            if [[ -n << parameters.aws-role-arn >> ]] && [[ -n << parameters.aws-role-session-name >> ]]; then
               temp_role=$(aws sts assume-role \
                       --role-arn << parameters.aws-role-arn >> \
                       --role-session-name << parameters.aws-role-session-name >> )
@@ -64,13 +64,14 @@ jobs:
       aws-role-arn:
         type: string
         description: The arn of the aws role able to use ecr
+        default: ""
       aws-role-session-name:
         type: string
         description: The name of the role's session name
+        default: ""
       ecr-repository-name:
         type: string
         description: The name of the ECR repository where the image will be scanned
-        default: ""
     executor: trussworks-circleci-docker-primary
     steps:
       - scan:
