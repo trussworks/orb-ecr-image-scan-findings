@@ -12,3 +12,12 @@ repos:
     rev: v0.22.0
     hooks:
       - id: markdownlint
+
+  - repo: local
+    hooks:
+      - id: orb.yml
+        name: validate orb.yml
+        language: system
+        entry: circleci orb validate orb.yml
+        files: 'orb\.yml'
+        pass_filenames: false
