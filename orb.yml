@@ -83,4 +83,4 @@ jobs:
 executors:
   trussworks-circleci:
     docker:
-      - image: trussworks/circleci:6986bb9022e5a83599feb66a7128a2d0fa12732a
+      - image: trussworks/circleci:29ab89fdada1f85c5d8fb685a2c71660f0c5f60c
