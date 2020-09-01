@@ -73,7 +73,7 @@ jobs:
       ecr-repository-name:
         type: string
         description: The name of the ECR repository where the image will be scanned
-    executor: trussworks-circleci-docker-primary
+    executor: trussworks-circleci
     steps:
       - scan:
           aws-role-arn: << parameters.aws-role-arn >>
@@ -81,6 +81,6 @@ jobs:
           ecr-repository-name: << parameters.ecr-repository-name >>
 
 executors:
-  trussworks-circleci-docker-primary:
+  trussworks-circleci:
     docker:
-      - image: trussworks/circleci-docker-primary:e66fbea875bcb788b29b1b5f59142e8231961ec5
+      - image: trussworks/circleci:6986bb9022e5a83599feb66a7128a2d0fa12732a
